@@ -60,6 +60,7 @@ Laravel\Autoloader::$aliases = $aliases;
 
 Autoloader::map(array(
 	'Base_Controller' => path('app').'controllers/base.php',
+    'Daemons_Abstract_Daemon_Controller' => path('app').'controllers/daemons/abstract_daemon.php',
 ));
 
 /*
@@ -76,6 +77,8 @@ Autoloader::map(array(
 Autoloader::directories(array(
 	path('app').'models',
 	path('app').'libraries',
+    path('app').'controllers\daemons',
+
 ));
 
 /*
@@ -171,3 +174,4 @@ if ( ! Request::cli() and Config::get('session.driver') !== '')
 {
 	Session::load();
 }
+

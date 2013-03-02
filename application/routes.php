@@ -109,3 +109,8 @@ Route::filter('auth', function()
 {
 	if (Auth::guest()) return Redirect::to('login');
 });
+
+Route::controller('account');
+Route::controller('daemons.abstract_daemon');
+Route::controller('daemons.parser_processer');
+
