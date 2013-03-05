@@ -8,10 +8,10 @@
  */
 class Entity extends Eloquent
 {
-    const ENTITY_PROJECT = 'project';
-    const ENTITY_RUBRIC  = 'rublric';
-    const ENTITY_FILIAL  = 'filial';
-    const ENTITY_FIRM    = 'firm';
+    const ENTITY_PROJECT = 1;
+    const ENTITY_RUBRIC  = 2;
+    const ENTITY_FILIAL  = 3;
+    const ENTITY_FIRM    = 4;
 
     public static $table = 'row_entitys';
 }

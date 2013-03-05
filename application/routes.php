@@ -113,4 +113,5 @@ Route::filter('auth', function()
 Route::controller('account');
 Route::controller('daemons.abstract_daemon');
 Route::controller('daemons.parser_processer');
+Route::controller('daemons.filials_parser');
 

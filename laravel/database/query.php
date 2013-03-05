@@ -818,9 +818,21 @@ class Query {
 	 */
 	public function insert_get_id($values, $column = 'id')
 	{
-		$sql = $this->grammar->insert_get_id($this, $values, $column);
+//		$sql = $this->grammar->insert_get_id($/**/this, $values, $column);
+        if ( ! is_array(reset($values))) $values = array($values);
 
-		$result = $this->connection->query($sql, array_values($values));
+        $bindings = array();
+
+        // We need to merge the the insert values into the array of the query
+        // bindings so that they will be bound to the PDO statement when it
+        // is executed by the database connection.
+        foreach ($values as $value)
+        {
+            $bindings = array_merge($bindings, array_values($value));
+        }
+        $sql = $this->grammar->insert($this, $values);
+
+        $result =$this->connection->query($sql, $bindings);
 
 		// If the key is not auto-incrementing, we will just return the inserted value
 		if (isset($values[$column]))

@@ -6,7 +6,9 @@
  * Time: 11:12
  * To change this template use File | Settings | File Templates.
  */
-class Filial extends Eloquent
+class Rubric extends Eloquent
 {
-    public static $table = 'filials';
+    public static $table      = 'rubrics';
+    public static $timestamps = false;
+
 }

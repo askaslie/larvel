@@ -10,18 +10,19 @@ class Daemons_Abstract_Daemon_Controller extends Controller
     protected $api_url;
     protected $key;
     protected $vers;
+    protected $querry_counter;
+    const PAGESIZE = 50;
 
     public function __construct()
     {
         $this->audit = Audit::first();
         $this->querry_limit = Config::get('daemons.total_querry_limit');
-        print_r($this->querry_limit);
 
         if( empty( $this->audit )) {
             $now = new DateTime();
-            $set = $now->sub(new DateInterval('P1D'));
+            $set = $now->sub( new DateInterval('P1D'));
             $this->audit = new Audit( array(
-                'querry_count'      =>  0,
+                'querry_count'     =>  0,
                 'demon_a_activity' =>  $set,
                 'demon_b_activity' =>  $set,
                 'demon_c_activity' =>  $set,
@@ -32,14 +33,13 @@ class Daemons_Abstract_Daemon_Controller extends Controller
         $this->api_url = Config::get('daemons.api_url');
         $this->key = Config::get('daemons.api_key');
         $this->vers = Config::get('daemons.api_version');
+        $this->querry_counter = 0;
         if( $this->audit->querry_count > $this->querry_limit )
             die('На сегодня лимит запросов исчерпан!');
         echo 'работаем<br>';
-
-
     }
 
-    public function check_if_locked( $daemon_name )
+    protected function check_if_locked( $daemon_name )
     {
         $daemon_name_act = $daemon_name . '_activity';
         $last_act = new DateTime( $this->audit->$daemon_name_act );
@@ -51,7 +51,7 @@ class Daemons_Abstract_Daemon_Controller extends Controller
         return true;
     }
 
-    public function lock( $daemon_name )
+    protected function lock( $daemon_name )
     {
         $daemon_name_act = $daemon_name . '_activity';
         $this->audit->$daemon_name_act = new DateTime();
@@ -60,17 +60,17 @@ class Daemons_Abstract_Daemon_Controller extends Controller
 
     public function api_query( $method, $params = array())
     {
+        $this->querry_counter ++;
         $params['key'] = $this->key;
         $params['version'] = $this->vers;
-        $param_row = '';
         $params = '?' . http_build_query( $params );
-
         $url = $this->api_url . $method . $params;
         echo '<br>' . $url . '<br>';
+        sleep(0.2);
         return $this->qurl_request( $url );
     }
 
-    public function qurl_request( $url, $headers = '', $uagent = '')
+    public function qurl_request( $url, $headers = '', $uagent = '' )
     {
         if (empty( $url )) {
             return false;
@@ -101,5 +101,17 @@ class Daemons_Abstract_Daemon_Controller extends Controller
         curl_close($ch);
         return $result;
     }
+
+    protected function create_entity( $entity_name, $json )
+    {
+        $entity = new Entity( array(
+            'entity_name'           =>  $entity_name,
+            'row_json'              =>  $json
+        ));
+        $entity->timestamps();
+        $entity->save();
+        return $entity->id;
+    }
+
 
 }
