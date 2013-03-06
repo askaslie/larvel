@@ -8,6 +8,7 @@
  */
 class Rubric extends Eloquent
 {
+    public $rus_name = 'рубрика';
     public static $table      = 'rubrics';
     public static $timestamps = false;
 

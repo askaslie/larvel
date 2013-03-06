@@ -10,19 +10,26 @@ class Account_Controller extends Base_Controller
 {
     public function action_index()
     {
-
-        Schema::create('filials', function($table) {
-            $table->increments('id');
-            $table->string('external_id', 32);
-            $table->string('firm_external_id', 32);
-            $table->string('project_id', 32);
-            $table->integer('raw_entity_id');
-            $table->string('name', 150);
-            $table->timestamps();
-        });
+//        if (Auth::check())
+//        {
+//            return "You're logged in!";
+//        } else {
+//            return Redirect::to('login');
+//        }
+        $object = Rubric::Where('external_id', '=', '8022157095337992' )->first();
+        print_r($object);
+        echo URL::to_asset('css/style.css');
+        $password = Hash::make('5@ch0k');
+        print_r($password);
+        Asset::add('jquery', 'js/jquery.js');
     }
     public function action_logisdsdsn()
-    {
+    {        Schema::create('users', function($table) {
+        $table->increments('id');
+        $table->string('username', 128);
+        $table->string('password', 64);
+    });
+
         Schema::create('tasks', function($table) {
             $table->increments('id');
             $table->string('project_external_id');

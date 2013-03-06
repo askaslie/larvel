@@ -34,9 +34,12 @@
 
 Route::get('/', function()
 {
-	return View::make('home.index');
+    return Redirect::to('main');
 });
 
+Route::get('homes', function() {
+    return Redirect::to('main');
+});
 /*
 |--------------------------------------------------------------------------
 | Application 404 & 500 Error Handlers
@@ -110,8 +113,48 @@ Route::filter('auth', function()
 	if (Auth::guest()) return Redirect::to('login');
 });
 
+Route::get('login', function() {
+    return View::make('auth.login');
+});
+Route::post('login', function() {
+    // get POST data
+    $userdata = array(
+        'username'      => Input::get('username'),
+        'password'      => Input::get('password')
+    );
+    if ( Auth::attempt($userdata) )
+    {
+        // we are now logged in, go to home
+        return Redirect::to('homes');
+    }
+    else
+    {
+        // auth failure! lets go back to the login
+        return Redirect::to('login')
+            ->with('login_errors', true);
+        // pass any error notification you want
+        // i like to do it this way :)
+    }
+});
+
+Route::filter('auth', function()
+{
+    if (Auth::guest()) return Redirect::to('login');
+});
+
+Route::get('logout', function() {
+    Auth::logout();
+    return Redirect::to('login');
+});
+
+
 Route::controller('account');
+Route::controller('main');
+Route::controller('projects');
 Route::controller('daemons.abstract_daemon');
 Route::controller('daemons.parser_processer');
 Route::controller('daemons.filials_parser');
+Route::any('/', function () {
+    return Redirect::to('main');
+});
 

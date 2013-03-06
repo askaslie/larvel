@@ -8,6 +8,7 @@
  */
 class Project extends Eloquent
 {
+    public $rus_name = 'проект';
     public static $table = 'projects';
     public static $timestamps = false;
 

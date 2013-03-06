@@ -8,5 +8,6 @@
  */
 class Filial extends Eloquent
 {
+    public $rus_name = 'филиал';
     public static $table = 'filials';
 }

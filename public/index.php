@@ -32,3 +32,9 @@ unset($web);
 // Launch Laravel.
 // --------------------------------------------------------------
 require path('sys').'laravel.php';
+if ( Auth::check() ) {
+} else {
+    return Redirect::to('login');
+}
+
+return( View::make('homes'));
