@@ -20,7 +20,6 @@ class Main_Controller extends Base_Controller
         $chain = $this->session_queue( $object_id );
 
         if( isset( $object_id ) && is_numeric( $object_id )) {
-
             foreach( array('Rubric', 'Filial', 'Project') as $cl ) {
                 $object = $cl::Where('external_id', '=', (string)$object_id )->first();
                 if( !empty( $object )) {
@@ -45,6 +44,6 @@ class Main_Controller extends Base_Controller
             }
             Session::put( 'chain', $chain );
         }
-        return $chain;
+        return $chain ? $chain : array();
     }
 }

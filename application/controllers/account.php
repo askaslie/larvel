@@ -10,18 +10,7 @@ class Account_Controller extends Base_Controller
 {
     public function action_index()
     {
-//        if (Auth::check())
-//        {
-//            return "You're logged in!";
-//        } else {
-//            return Redirect::to('login');
-//        }
-        $object = Rubric::Where('external_id', '=', '8022157095337992' )->first();
-        print_r($object);
-        echo URL::to_asset('css/style.css');
-        $password = Hash::make('5@ch0k');
-        print_r($password);
-        Asset::add('jquery', 'js/jquery.js');
+
     }
     public function action_logisdsdsn()
     {        Schema::create('users', function($table) {
@@ -78,14 +67,5 @@ class Account_Controller extends Base_Controller
             $table->boolean('succesfully_parced');
         });
     }
-    public function action_logout()
-    {
-        echo "This is the logout action.";
-    }
-    public function action_welcome($name = 'username')
-    {
-        $array_test = array(1,2,3,4);
-        return View::make('welcome')->
-            with('test', $array_test);
-    }
+
 }

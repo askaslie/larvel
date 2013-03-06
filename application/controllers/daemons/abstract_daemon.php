@@ -33,7 +33,7 @@ class Daemons_Abstract_Daemon_Controller extends Controller
         $this->api_url = Config::get('daemons.api_url');
         $this->key = Config::get('daemons.api_key');
         $this->vers = Config::get('daemons.api_version');
-        $this->querry_counter = 0;
+        $this->querry_counter = $this->audit->querry_count;
         if( $this->audit->querry_count > $this->querry_limit )
             die('На сегодня лимит запросов исчерпан!');
         echo 'работаем<br>';

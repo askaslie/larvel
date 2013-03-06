@@ -20,7 +20,6 @@
                     break;
                 sleep(7);
             }
-            die();
             $this->lock( $this->name );
         }
 
