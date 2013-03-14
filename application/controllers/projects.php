@@ -39,14 +39,22 @@ class Projects_Controller extends Base_Controller
         $res_rubrics    = array();
         $res_subrubrics = array();
         if( $project_id  && is_numeric( $project_id )) {
+            $tasks = Parsetask::Where('project_external_id', '=', $project_id )->get();
+            $task_status_array = array();
+            foreach( $tasks as $task ) {
+                $task_status_array[$task->rubric_external_id] = $task->succesfully_parced;
+            }
             $rubrics = Rubric::Where('project_external_id', '=', $project_id )->get();
             foreach( $rubrics as $rubric ) {
                 if( $rubric->parent_rubric_external_id == 0 ) {
                     $res_rubrics[$rubric->external_id] = $rubric->name;
                 } else {
+                    $status = isset($task_status_array[$rubric->external_id]) ?
+                        $task_status_array[$rubric->external_id] ? ' (done)' : ' (in process)' : '';
                     $res_subrubrics[$rubric->parent_rubric_external_id][] = array(
                         'external_id' =>    $rubric->external_id,
                         'name'        =>    $rubric->name,
+                        'status'      =>    $status
                     );
                 }
             }
@@ -58,6 +66,7 @@ class Projects_Controller extends Base_Controller
             'projects'      =>  $projects,
             'subrubrics'    =>  $res_subrubrics,
             'rubrics'       =>  $res_rubrics,
+            'current_project_id' => $project_id,
         ));
     }
 
