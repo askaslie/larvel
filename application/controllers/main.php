@@ -14,7 +14,7 @@ class Main_Controller extends Base_Controller
         $chain = $this->session_queue( $object_id );
 
         if( isset( $object_id ) && is_numeric( $object_id )) {
-            foreach( array('Rubric', 'Filial', 'Project') as $cl ) {
+            foreach( array('Rubric', 'Filial', 'Project', 'Firm') as $cl ) {
                 $object = $cl::Where('external_id', '=', (string)$object_id )->first();
                 if( !empty( $object )) {
                     $raw_entity = Entity::Find( $object->row_entity_id );

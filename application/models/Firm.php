@@ -9,6 +9,6 @@
 class Firm extends Eloquent
 {
     public $rus_name = 'фирма';
-
     public static $table = 'firms';
+
 }

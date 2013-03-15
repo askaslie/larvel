@@ -63,6 +63,10 @@
                         if( !empty( $check ))
                             continue;
                         $this->get_filial($filial_jr->id, $filial_jr->hash, $project->external_id );
+                        $check = Firm::where( 'external_id', '=', $filial_jr->firm_group->id )->get();
+                        if( !empty( $check ))
+                            continue;
+                        $this->get_firm($filial_jr->firm_group->id);
                     }
                     $task->page ++;
                     $task->filials_count = $res->total;
@@ -101,5 +105,29 @@
                 'row_entity_id'     =>  $raw_entity_id
             ));
             $filial->save();
+        }
+
+        private function get_firm( $id )
+        {
+            $method = 'firmsByFilialId';
+            $params = array(
+                'firmid'     =>  $id,
+                'pagesize'   =>  self::PAGESIZE,
+            );
+            $raw_res = $this->api_query( $method, $params );
+            $res = json_decode($raw_res);
+            if ( isset( $res->error_message )) {
+                //todo логи
+                print_r( $res );
+                die();
+            }
+            if ( isset( $res->title ))
+                return true;
+            $raw_entity_id = $this->create_entity( Entity::ENTITY_FIRM, $raw_res );
+            $firm = new Firm( array(
+                'external_id'       =>  $res->firm_id,
+                'row_entity_id'     =>  $raw_entity_id
+            ));
+            $firm->save();
         }
     }

@@ -12,7 +12,6 @@ class Daemons_Abstract_Daemon_Controller extends Controller
     public function __construct()
     {
         $this->audit = Audit::first();
-
         if( empty( $this->audit )) {
             $now = new DateTime();
             $set = $now->sub( new DateInterval('P1D'));
@@ -25,7 +24,8 @@ class Daemons_Abstract_Daemon_Controller extends Controller
             ));
             $this->audit->save();
         }
-
+        $this->querry_count_reset();
+        die();
         $this->querry_counter = $this->audit->querry_count;
         if( $this->audit->querry_count >= $this->audit->total_querry_limit )
             die('На сегодня лимит запросов исчерпан!');
@@ -106,5 +106,18 @@ class Daemons_Abstract_Daemon_Controller extends Controller
         return $entity->id;
     }
 
+    protected function querry_count_reset()
+    {
+        $time_for_reset = new DateTime( $this->audit->querry_count_reset_time);
+        $now = new DateTime();
+        $interval = $now->diff( $time_for_reset );
+        $total_diff = $interval->s + $interval->i * 60 + $interval->h * 60 * 60 + $interval->d * 60 * 60 * 24;
+
+        if ( $total_diff > 86400) {
+            $this->audit->querry_count_reset_time = $now;
+            $this->audit->querry_count = 0;
+            $this->audit->save();
+        }
+    }
 
 }
