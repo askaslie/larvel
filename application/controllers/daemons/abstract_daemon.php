@@ -6,17 +6,12 @@ class Daemons_Abstract_Daemon_Controller extends Controller
     *Entry point
     */
     protected $audit;
-    protected $querry_limit;
-    protected $api_url;
-    protected $key;
-    protected $vers;
     protected $querry_counter;
     const PAGESIZE = 50;
 
     public function __construct()
     {
         $this->audit = Audit::first();
-        $this->querry_limit = Config::get('daemons.total_querry_limit');
 
         if( empty( $this->audit )) {
             $now = new DateTime();
@@ -30,11 +25,9 @@ class Daemons_Abstract_Daemon_Controller extends Controller
             ));
             $this->audit->save();
         }
-        $this->api_url = Config::get('daemons.api_url');
-        $this->key = Config::get('daemons.api_key');
-        $this->vers = Config::get('daemons.api_version');
+
         $this->querry_counter = $this->audit->querry_count;
-        if( $this->audit->querry_count > $this->querry_limit )
+        if( $this->audit->querry_count > $this->audit->querry_limit )
             die('На сегодня лимит запросов исчерпан!');
         echo 'работаем<br>';
     }
@@ -61,10 +54,10 @@ class Daemons_Abstract_Daemon_Controller extends Controller
     public function api_query( $method, $params = array())
     {
         $this->querry_counter ++;
-        $params['key'] = $this->key;
-        $params['version'] = $this->vers;
+        $params['key'] = $this->audit->api_key;
+        $params['version'] = $this->audit->api_version;
         $params = '?' . http_build_query( $params );
-        $url = $this->api_url . $method . $params;
+        $url = $this->audit->api_url . $method . $params;
         echo '<br>' . $url . '<br>';
         sleep(0.2);
         return $this->qurl_request( $url );

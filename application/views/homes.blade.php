@@ -14,7 +14,7 @@
         Это - {{ $type }}
     @endif
     <pre>
-        {{ isset( $raw_entity ) ? $raw_entity : 'Пусто'  }}
+        {{ !empty( $raw_entity ) ? print_r( (array)$raw_entity ) : 'Пусто'  }}
     </pre>
 
 <br><br>

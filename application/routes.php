@@ -151,6 +151,7 @@ Route::get('logout', function() {
 Route::controller('account');
 Route::controller('main');
 Route::controller('projects');
+Route::controller('options');
 Route::controller('daemons.abstract_daemon');
 Route::controller('daemons.parser_processer');
 Route::controller('daemons.filials_parser');
