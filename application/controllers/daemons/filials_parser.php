@@ -14,6 +14,7 @@
             set_time_limit(240);
             if ( $this->check_if_locked( $this->name ))
                 echo 'работаем дальше<br>';
+
             $this->parse_filials();
         }
 
@@ -30,6 +31,7 @@
                     echo '<br>Нет заданий для парса!';
                     die();
                 }
+                $this->lock($this->name);
                 $project = Project::where('external_id', '=',$task->project_external_id)->first();
                 $rubric  = Rubric::where('external_id', '=',$task->rubric_external_id)->first();
                 if( empty( $project ) || empty( $rubric )) {

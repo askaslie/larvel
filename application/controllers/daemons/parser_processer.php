@@ -13,7 +13,7 @@
             set_time_limit(2000);
             if ( $this->check_if_locked( $this->name ))
                 echo 'работаем дальше<br>';
-
+            $this->lock($this->name);
            // $this->parse_projects();
            
             while(1 ) {
