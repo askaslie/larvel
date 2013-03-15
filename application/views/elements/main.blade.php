@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="author" content="Си-Норд">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- For mobile devises -->
-    <title>Тест</title>
+    <title>2gis parser</title>
     <link rel="stylesheet" href="{{ URL::to_asset('css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ URL::to_asset('css/bootstrap-responsive.css') }}">
     <link rel="stylesheet" href="{{ URL::to_asset('css/kengry.css') }}">
