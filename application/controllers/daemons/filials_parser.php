@@ -62,7 +62,9 @@
                         $check = Filial::where( 'external_id', '=', $filial_jr->id )->get();
                         if( !empty( $check ))
                             continue;
-                        $this->get_filial($filial_jr->id, $filial_jr->hash, $project->external_id );
+                        if( !$this->get_filial($filial_jr->id, $filial_jr->hash, $project->external_id ))
+                            continue;
+
                         $check = Firm::where( 'external_id', '=', $filial_jr->firm_group->id )->get();
                         if( !empty( $check ))
                             continue;
@@ -92,7 +94,7 @@
             if ( isset( $res->error_message )) {
                 //todo логи
                 print_r( $res );
-                die();
+               return false;
             }
             if ( isset( $res->title ))
                 return true;
@@ -119,7 +121,7 @@
             if ( isset( $res->error_message )) {
                 //todo логи
                 print_r( $res );
-                die();
+                return false;
             }
             if ( isset( $res->title ))
                 return true;
