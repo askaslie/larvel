@@ -25,7 +25,6 @@ class Daemons_Abstract_Daemon_Controller extends Controller
             $this->audit->save();
         }
         $this->querry_count_reset();
-        die();
         $this->querry_counter = $this->audit->querry_count;
         if( $this->audit->querry_count >= $this->audit->total_querry_limit )
             die('На сегодня лимит запросов исчерпан!');
