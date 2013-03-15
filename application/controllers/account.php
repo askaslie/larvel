@@ -10,6 +10,12 @@ class Account_Controller extends Base_Controller
 {
     public function action_index()
     {
+        $users = DB::query('delete  from filials');
+        $users = DB::query('delete  from tasks');
+        $users = DB::query('delete  from row_entitys where entity_name = 3');
+    }
+    public function action_logisdsdsn()
+    {
         Schema::create('firms', function($table) {
             $table->increments('id');
             $table->string('external_id', 32);
@@ -17,9 +23,6 @@ class Account_Controller extends Base_Controller
             $table->timestamps();
         });
 
-    }
-    public function action_logisdsdsn()
-    {
         Schema::create('users', function($table) {
             $table->increments('id');
             $table->string('username', 128);

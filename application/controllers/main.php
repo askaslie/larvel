@@ -24,8 +24,10 @@ class Main_Controller extends Base_Controller
             }
         } elseif( $object_id == 'random') {
             $raw_entity = Entity::where_entity_name(3)->order_by(DB::raw(''),DB::raw('RAND()'))->first();
-            $res  = json_decode($raw_entity->row_json);
-            $type = 'филиал';
+            if( $raw_entity ) {
+                $res  = json_decode($raw_entity->row_json);
+                $type = 'филиал';
+            }
         }
         return View::make('homes', array('raw_entity' => $res, 'type' => $type, 'chain' => $chain ));
     }
