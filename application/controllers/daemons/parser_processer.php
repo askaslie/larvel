@@ -14,11 +14,14 @@
             if ( $this->check_if_locked( $this->name ))
                 echo 'работаем дальше<br>';
 
-            $this->parse_projects();
+           // $this->parse_projects();
+           
             while(1 ) {
                 if( !$this->parse_rubrics())
                     break;
                 sleep(7);
+                $this->audit->querry_count = $this->querry_counter;
+                $this->audit->save();
             }
             $this->lock( $this->name );
         }

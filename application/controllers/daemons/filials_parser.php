@@ -68,10 +68,8 @@
 
                 }
                 print_r($this->querry_counter);
-
-                $this->audit->querry_count += $this->querry_counter;
+                $this->audit->querry_count = $this->querry_counter;
                 $this->audit->save();
-                die();
             }
 
         }
