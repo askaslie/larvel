@@ -33,17 +33,15 @@ class Main_Controller extends Base_Controller
     }
 
     private function session_queue( $object_id ) {
-        $chain = Session::get( 'chain' );
-        if( $object_id ) {
-            if ( !$chain ) {
-                $chain = array( $object_id );
-            } else {
-                if( count( $chain) > 4)
-                    array_shift( $chain);
-                $chain[] = $object_id;
-            }
-            Session::put( 'chain', $chain );
+//        $chain = Session::get( 'chain' );
+        $entitys = DB::table('row_entitys')->order_by('id','desc')->take(5)->get();
+        $chain = array();
+        foreach( $entitys as $a ){
+            $b = json_decode( $a->row_json);
+            $chain[] = isset( $b->id) ? $b->id : $b->firm_id;
         }
+
+        Session::put( 'chain', $chain );
         return $chain ? $chain : array();
     }
 }
