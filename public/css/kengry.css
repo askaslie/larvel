@@ -1,0 +1,68 @@
+/* Отступ перед h4 */
+    h3, h4 {
+      padding-top: 15px;
+    }
+
+/*  Хак №1
+    Отступ сверху от «navbar». */
+    body { padding-top: 20px; }
+
+/*  Хак №2
+    Вывод ошибок
+    
+    В Бутстрапе подсказки для элементов формы обозначаются классами:
+    .block-help — под элементом;
+    .block-inline — справа от элемента.
+
+    При выводе ошибок используется дополнительный класс .error для слоя с классом .control-group,
+    который красит подсказки в красный цвет. Получается, что подсказка и ошибка не различаются, что не правильно.
+
+    Есть решение данной проблемы: https://github.com/twitter/bootstrap/pull/2173,
+    но его нет в оффициальном релизе. */
+
+    .control-group.error .help-block,
+    .control-group.error .help-inline {
+      /* Гасим красный цвет для подсказок при выводе ошибок. */
+      color: #444444;
+    }
+    .control-group.error .error {
+      /* Ошибки красим обратно в красный. */
+      color: #b94a48;
+    }
+
+/*  Хак №3
+    Красим подвал
+
+    В самом файле документации к Bootstrap подвал оформлен хорошо: с отступами и линией.
+    Но в коде фрэймворка отступы и линия отсутсвуют. */
+    
+    .footer {
+      margin-top: 30px;
+      padding: 20px 5px 36px 0;
+      border-top: 1px solid #e5e5e5;
+    }
+    .footer p {
+      margin-bottom: 0;
+      color: #777;
+    }
+
+/*  Хак №4
+    Цветные ссылки */
+    .sup-online { color: #458842; }
+    .sup-offline { color: #ba4b45; }
+    .delete-link { color: #ba4b45; }
+    .red-link { color: #ba4b45; }
+    .green-link { color: #458842; }
+
+/*  Хак №5
+    Отступ для чек-бокса
+
+    В шаблоне partner/services.html нужно сделать отступ у чекбокса. */
+    .call-center-pin { padding-left: 37px; }
+
+/*  Хак №6
+    Sound Manager
+
+    Нужно сделать отступ сверху, чтобы плеер не прилипал к подсказке, а ссылку «удалить» поместить справа от плеера. */
+    .sound-manager { padding: 10px 0 5px 0; }
+    .p-sound-manager { margin: -24px 0 0 167px; }
