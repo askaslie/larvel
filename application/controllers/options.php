@@ -29,6 +29,10 @@ class Options_Controller extends Base_Controller
     }
 
     public function action_reset() {
+        if ( Auth::check()) {
+        } else {
+            return Redirect::to('login');
+        }
         $options = Audit::first();
         $options->total_querry_limit = 40000;
         $options->api_key = 'ruyjie7338';
