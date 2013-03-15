@@ -4,7 +4,8 @@
 Запросов выполнено за сегодня : {{ $options->querry_count}} <br>
 Активных заданий : {{ $tasks_active}} <br>
 Всего записей в базе : {{ $total_entries }} <br> <br> <br>
-
+<a href="{{ URL::to_action('daemons.filials_parser')}}" target="_blank">Запустить парсер принудительно</a>
+<br><br>
 <form method="post" name="options">
     <?php echo Form::label('total_querry_limit', 'Лимит запросов'); ?>
     <?php echo Form::text('total_querry_limit', $options->total_querry_limit); ?>

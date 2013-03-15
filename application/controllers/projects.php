@@ -16,6 +16,7 @@ class Projects_Controller extends Base_Controller
         }
         $arr = Input::Get( 'arr' );
         $project_id = trim( Input::Get('project_id'));
+        $project_id = $project_id ? $project_id : 69;
 
         if( is_array( $arr ) && !empty( $arr) && is_numeric( $project_id )) {
             foreach( $arr as $rubric_id ) {
