@@ -1,21 +1,15 @@
 <?php
-/**
- * Created by JetBrains PhpStorm.
- * User: mr. White
- * Date: 27.02.13
- * Time: 2:22
- * To change this template use File | Settings | File Templates.
- */
+
 class Main_Controller extends Base_Controller
 {
     public function action_index()
     {
-        if ( Auth::check() ) {
+        if ( Auth::check()) {
         } else {
             return Redirect::to('login');
         }
         $type = '';
-        $res = 'Запись не найдена';
+        $res = '';
         $object_id = trim( Input::Get('object_id'));
         $chain = $this->session_queue( $object_id );
 
@@ -24,7 +18,7 @@ class Main_Controller extends Base_Controller
                 $object = $cl::Where('external_id', '=', (string)$object_id )->first();
                 if( !empty( $object )) {
                     $raw_entity = Entity::Find( $object->row_entity_id );
-                    $res  = $raw_entity->row_json;
+                    $res  = json_decode($raw_entity->row_json);
                     $type = $object->rus_name;
                 }
             }
