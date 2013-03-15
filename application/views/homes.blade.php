@@ -5,6 +5,9 @@
     @foreach( $chain as $code )
         <a href="?object_id={{ $code }}"><code>{{ $code }}</code></a>&emsp;
     @endforeach
+    <form method="post">
+        <button class="btn btn-primary" formaction="?object_id=random"> Случайный филиал</button>
+    </form>
     </p><form class="form-inline" method="GET">
     <input type="text" name="object_id" class="span3" placeholder="Введите ID" >
     <button type="submit" class="btn">Искать</button>
