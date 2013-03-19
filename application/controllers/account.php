@@ -10,9 +10,23 @@ class Account_Controller extends Base_Controller
 {
     public function action_index()
     {
-        $users = DB::query('delete  from filials');
-        $users = DB::query('delete  from tasks');
-        $users = DB::query('delete  from row_entitys where entity_name = 3');
+        $tasks = Parsetask::Get();
+        foreach( $tasks as $task ) {
+            /** @var $task Parsetask*/
+            if( $task->project_external_id != 38 )
+                continue;
+            $rubric = Rubric::where('external_id', '=', $task->rubric_external_id )->first();
+            echo 'Рубрика: ', $rubric->name,' : ', $task->filials_count, ' записей', '<br>';
+        }
+
+
+    }
+
+    public function action_test() {
+        $check_date = new DateTime();
+        $check_date = $check_date->sub(new DateInterval('P7D'));
+        $a = Parsetask::where('succesfully_parced', ' = ', true )->where( 'updated_at','<', $check_date->format('Y-m-d H:i:s'))->first();
+
     }
     public function action_logisdsdsn()
     {

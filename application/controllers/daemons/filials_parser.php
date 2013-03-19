@@ -27,9 +27,16 @@
             $start = time();
             while( time() - $start < 220 ) {
                 $task = Parsetask::where('succesfully_parced', ' = ', false )->first();
+
                 if( empty( $task )) {
-                    echo '<br>Нет заданий для парса!';
-                    die();
+                    $check_date = new DateTime();
+                    $check_date = $check_date->sub(new DateInterval('P7D'));
+                    $task = Parsetask::where('succesfully_parced', ' = ', true )->where( 'updated_at','<', $check_date->format('Y-m-d H:i:s'))->first();
+                    if( empty( $task )) {
+                        echo '<br>Нет заданий для парса!';
+                        die();
+                    }
+
                 }
                 $this->lock($this->name);
                 $project = Project::where('external_id', '=',$task->project_external_id)->first();
