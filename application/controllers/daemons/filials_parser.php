@@ -11,7 +11,7 @@
         public function action_index()
         {
             header('Content-Type: text/html; charset=utf-8');
-            set_time_limit(240);
+            set_time_limit(179);
             if ( $this->check_if_locked( $this->name ))
                 echo 'работаем дальше<br>';
 
@@ -128,7 +128,6 @@
             }
             $filial->save();
         }
-
 
         private function get_firm( $id )
         {
