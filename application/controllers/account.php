@@ -18,16 +18,18 @@ class Account_Controller extends Base_Controller
             $rubric = Rubric::where('external_id', '=', $task->rubric_external_id )->first();
             echo 'Рубрика: ', $rubric->name,' : ', $task->filials_count, ' записей', '<br>';
         }
-
-
     }
 
     public function action_test() {
+        Schema::table('filials', function($table) {
+            $table->integer('parsetask_id');
+        });
+
         $check_date = new DateTime();
         $check_date = $check_date->sub(new DateInterval('P7D'));
         $a = Parsetask::where('succesfully_parced', ' = ', true )->where( 'updated_at','<', $check_date->format('Y-m-d H:i:s'))->first();
-
     }
+
     public function action_logisdsdsn()
     {
         Schema::create('firms', function($table) {
@@ -65,12 +67,14 @@ class Account_Controller extends Base_Controller
             $table->string('api_key' );
             $table->string('api_version');
         });
+
         Schema::create('row_entitys', function($table) {
             $table->increments('id');
             $table->integer('entity_name');
             $table->text('row_json');
             $table->timestamps();
         });
+
         Schema::create('filials', function($table) {
             $table->increments('id');
             $table->string('external_id', 32);
@@ -79,7 +83,9 @@ class Account_Controller extends Base_Controller
             $table->string('name', 150);
             $table->integer('row_entity_id');
             $table->timestamps();
+            $table->integer('parsetask_id');
         });
+
         Schema::create('rubrics', function($table) {
             $table->increments('id');
             $table->string('external_id', 32);
@@ -88,6 +94,7 @@ class Account_Controller extends Base_Controller
             $table->string('project_external_id', 20);
             $table->integer('row_entity_id');
         });
+
         Schema::create('projects', function($table) {
             $table->increments('id');
             $table->string('external_id', 32);
@@ -95,10 +102,12 @@ class Account_Controller extends Base_Controller
             $table->integer('row_entity_id');
             $table->boolean('succesfully_parced');
         });
+
         $pass = Hash::make('my_password_string');
         User::insert( array( 'username' =>  'admin',
             'password' =>  $pass
         ));
+
         $now = new DateTime();
         $set = $now->sub( new DateInterval('P1D'));
         $audit = new Audit( array(

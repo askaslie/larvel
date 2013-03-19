@@ -25,18 +25,20 @@
         {
 //            http://catalog.api.2gis.ru/searchinrubric?what=хостинг&where=новосибирск&page=1&pagesize=30&sort=relevance&version=1.3&key=1234567890
             $start = time();
-            while( time() - $start < 220 ) {
+            while( time() - $start < 150 ) {
+                $update = false;
+                //выбираем таск для обработки/обновления
                 $task = Parsetask::where('succesfully_parced', ' = ', false )->first();
-
                 if( empty( $task )) {
                     $check_date = new DateTime();
                     $check_date = $check_date->sub(new DateInterval('P7D'));
                     $task = Parsetask::where('succesfully_parced', ' = ', true )->where( 'updated_at','<', $check_date->format('Y-m-d H:i:s'))->first();
+                    $update = true;
                     if( empty( $task )) {
                         echo '<br>Нет заданий для парса!';
                         die();
                     }
-
+                    $task->page = 0;
                 }
                 $this->lock($this->name);
                 $project = Project::where('external_id', '=',$task->project_external_id)->first();
@@ -66,12 +68,12 @@
 
                     foreach( $res->result as $filial_jr ) {
                         //Пропускаем уже спарсенное
-                        $check = Filial::where( 'external_id', '=', $filial_jr->id )->get();
-                        if( !empty( $check ))
+                        $check = Filial::where( 'external_id', '=', $filial_jr->id )->first();
+                        if( !empty( $check ) && !$update ) {
                             continue;
-                        if( !$this->get_filial($filial_jr->id, $filial_jr->hash, $project->external_id ))
+                        }
+                        if( !$this->get_filial( $filial_jr->id, $filial_jr->hash, $project->external_id, $task->id, $check ))
                             continue;
-
                         $check = Firm::where( 'external_id', '=', $filial_jr->firm_group->id )->get();
                         if( !empty( $check ))
                             continue;
@@ -80,16 +82,14 @@
                     $task->page ++;
                     $task->filials_count = $res->total;
                     $task->save();
-
                 }
                 print_r($this->querry_counter);
                 $this->audit->querry_count = $this->querry_counter;
                 $this->audit->save();
             }
-
         }
 
-        private function get_filial( $id, $hash, $project_id )
+        private function get_filial( $id, $hash, $project_id, $task_id, $filial = null )
         {
             $method = 'profile';
             $params = array(
@@ -98,6 +98,8 @@
             );
             $raw_res = $this->api_query( $method, $params );
             $res = json_decode($raw_res);
+            unset($res->see_also);
+            $raw_res = json_encode( $res );
             if ( isset( $res->error_message )) {
                 //todo логи
                 print_r( $res );
@@ -105,16 +107,28 @@
             }
             if ( isset( $res->title ))
                 return true;
-            $raw_entity_id = $this->create_entity( Entity::ENTITY_FILIAL, $raw_res );
-            $filial = new Filial( array(
-                'external_id'       =>  $res->id,
-                'firm_external_id'  =>  $res->firm_group->id,
-                'project_id'        =>  $project_id,
-                'name'              =>  $res->name,
-                'row_entity_id'     =>  $raw_entity_id
-            ));
+
+            if( !$filial ) {
+                $raw_entity_id = $this->create_entity( Entity::ENTITY_FILIAL, $raw_res );
+                $filial = new Filial( array(
+                    'external_id'       =>  $res->id,
+                    'firm_external_id'  =>  $res->firm_group->id,
+                    'project_id'        =>  $project_id,
+                    'name'              =>  $res->name,
+                    'row_entity_id'     =>  $raw_entity_id,
+                    'parsetask_id'      =>  $task_id
+                ));
+            } else {
+                $raw_entity = Entity::Find( $filial->row_entity_id );
+                $raw_entity->row_json = $raw_res;
+                $filial->name = $res->name;
+                $filial->external_id = $res->id;
+                $filial->parsetask_id = $task_id;
+                $raw_entity->save();
+            }
             $filial->save();
         }
+
 
         private function get_firm( $id )
         {
