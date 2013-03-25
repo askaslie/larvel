@@ -43,7 +43,7 @@ class Projects_Controller extends Base_Controller
             $tasks = Parsetask::Where('project_external_id', '=', $project_id )->get();
             $task_status_array = array();
             foreach( $tasks as $task ) {
-                $task_status_array[$task->rubric_external_id] = $task->succesfully_parced;
+                $task_status_array[$task->rubric_external_id] =  $task->succesfully_parced? $task->id : '';
             }
             $rubrics = Rubric::Where('project_external_id', '=', $project_id )->get();
             foreach( $rubrics as $rubric ) {
@@ -55,7 +55,9 @@ class Projects_Controller extends Base_Controller
                     $res_subrubrics[$rubric->parent_rubric_external_id][] = array(
                         'external_id' =>    $rubric->external_id,
                         'name'        =>    $rubric->name,
-                        'status'      =>    $status
+                        'status'      =>    $status,
+                        'task_id'     =>    isset( $task_status_array[$rubric->external_id]) ?
+                            $task_status_array[$rubric->external_id] : '',
                     );
                 }
             }
