@@ -23,7 +23,7 @@
                 @endif
                 <h4> {{ $title }}</h4>
                 @foreach( $subrubrics[$rubric_id] as $subrubric )
-                    <label class="checkbox"><input name="arr[]" type="checkbox" value="{{ $subrubric['external_id'] }}">{{ $subrubric['name'] }}{{ $subrubric['status'] }}</label>
+                    <label class="checkbox "><input name="arr[]" type="checkbox" {{ !$subrubric['status']? '':'checked'}} value="{{ $subrubric['external_id'] }}">{{ $subrubric['name'] }}{{ $subrubric['status'] }}</label>
                 @endforeach
                 @if ($i++ > 2 )
                         </div>

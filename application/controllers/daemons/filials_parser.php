@@ -23,7 +23,6 @@
          */
         private function parse_filials()
         {
-//            http://catalog.api.2gis.ru/searchinrubric?what=хостинг&where=новосибирск&page=1&pagesize=30&sort=relevance&version=1.3&key=1234567890
             $start = time();
             while( time() - $start < 150 ) {
                 $update = false;
@@ -32,7 +31,7 @@
                 if( empty( $task )) {
                     $check_date = new DateTime();
                     $check_date = $check_date->sub(new DateInterval('P7D'));
-                    $task = Parsetask::where('succesfully_parced', ' = ', true )->where( 'updated_at','<', $check_date->format('Y-m-d H:i:s'))->first();
+                    $task = Parsetask::where('succesfully_parced', ' = ', true )->where( 'updated_at','>', $check_date->format('Y-m-d H:i:s'))->first();
                     $update = true;
                     if( empty( $task )) {
                         echo '<br>Нет заданий для парса!';
