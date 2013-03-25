@@ -149,6 +149,7 @@ Route::get('logout', function() {
 
 
 Route::controller('account');
+Route::controller('task');
 Route::controller('main');
 Route::controller('projects');
 Route::controller('options');

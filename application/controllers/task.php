@@ -15,18 +15,18 @@ class Task_Controller extends Base_Controller
             return Redirect::to('login');
         }
         $task_id = Input::Get( 'taskId' );
-        $result = array();
         if ( $task_id ) {
-            $task = Parsetask::get( $task_id );
+            $task = Parsetask::where( 'id', '=', $task_id )->get();
             if( $task ) {
-                $project_id = trim( Input::Get('project_id'));
+                $filials = Filial::where('parsetask_id','=', $task_id)->get();
+                foreach( $filials as $filial ) {
+                    $entity = ( Entity::where('id', '=', $filial->row_entity_id)->first());
+                    $filial->info = json_decode( $entity->row_json);
+                    }
             }
         }
-        return View::make('projects', array(
-            'projects'      =>  $projects,
-            'subrubrics'    =>  $res_subrubrics,
-            'rubrics'       =>  $res_rubrics,
-            'current_project_id' => $project_id,
+        return View::make('tasks', array(
+            'filials'   =>  $filials
         ));
     }
 
