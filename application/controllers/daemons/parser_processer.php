@@ -136,7 +136,4 @@
             $check = Rubric::where( 'project_external_id', '=', $proj_id )->where( 'external_id','=', $rubric_id )->get();
             return empty($check);
         }
-
-
-
     }
